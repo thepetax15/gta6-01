@@ -47,8 +47,15 @@ function stageChase(game, runSteps) {
   // Final touches after the sim has settled: wanted, helicopter, mission.
   game.police.wanted = 3;
   // The heli hangs just east of the player (between the camera and the
-  // action), low and close, so it reads large in the frame.
-  forceHeli(game, { height: 10, radius: 10, angle: Math.PI / 2 });
+  // action), low and close, so it reads large in the frame. v2: the
+  // chase camera (not the setShotCamera, which stageChase sets after
+  // the last present() so it never applies — the render uses the chase
+  // cam at ~(p.x-10.8, 5.9, 0) looking east) sees the heli head-on, so
+  // it must be CLOSE to read: radius 10 -> 6 puts it 6 units ahead of
+  // the player car, ~16 from the lens, rotor spanning ~300px. Height
+  // 10 -> 4.5 drops it into the open upper-middle of the frame, clear
+  // of the mission panel above and the car below.
+  forceHeli(game, { height: 4.5, radius: 6, angle: Math.PI / 2 });
   stageMission(game, 3, 1, 65);
   car.speed = 25;
   car.vx = Math.sin(car.heading) * 25;
